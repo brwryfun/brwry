@@ -1,4 +1,6 @@
 [package]
 name = "brwry-cellar"
-version = "0.0.1"
-edition = "2021"
+description = "Brwry cellar on-chain program. Creates vesting casks and releases them along a curve."
+version.workspace = true
+edition.workspace = true
+authors.workspace = true

@@ -1,4 +1,6 @@
 [package]
 name = "brwry-curves"
-version = "0.0.1"
-edition = "2021"
+description = "Unlock curve math shared between the Brwry cellar program and the off-chain designer."
+version.workspace = true
+edition.workspace = true
+authors.workspace = true

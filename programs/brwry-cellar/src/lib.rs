@@ -1,8 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("Brwry11111111111111111111111111111111111111");
+pub mod errors;
+pub mod instructions;
+pub mod state;
 
-#[program]
-pub mod brwry_cellar {
-    use super::*;
-}
