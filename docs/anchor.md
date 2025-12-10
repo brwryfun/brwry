@@ -26,3 +26,4 @@ release, never closed.
 | `vault` | `Pubkey` | Token account owned by the cask PDA |
 | `total_amount` | `u64` | Deposit in raw token units |
 | `released_amount` | `u64` | Running total already claimed |
+
