@@ -17,4 +17,3 @@ If the answer to the third question is "because it looks cool", stop.
 That is not a reason, and the recipient will resent it later.
 
 ## 2. Open the cellar
-
