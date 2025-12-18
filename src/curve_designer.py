@@ -37,3 +37,35 @@ def cliff(t: float, cliff_at: float = 0.25) -> float:
 
 def exponential(t: float, k: float = 3.0) -> float:
     # Slow start, steep finish. k controls how steep the finish is.
+    return clamp((math.exp(k * clamp(t)) - 1.0) / (math.exp(k) - 1.0))
+
+
+def logarithmic(t: float, k: float = 4.0) -> float:
+    # Fast start, long tail. Mirrors the exponential curve.
+    return clamp(math.log1p(k * clamp(t)) / math.log1p(k))
+
+
+def s_curve(t: float, steepness: float = 6.0) -> float:
+    # A logistic curve centered at t = 0.5, normalized so f(0) = 0, f(1) = 1.
+    def raw(x: float) -> float:
+        return 1.0 / (1.0 + math.exp(-steepness * (x - 0.5)))
+
+    lo = raw(0.0)
+    hi = raw(1.0)
+    return clamp((raw(clamp(t)) - lo) / (hi - lo))
+
+
+PRESETS: dict[str, Callable[[float], float]] = {
+    "linear": linear,
+    "cliff": cliff,
+    "exponential": exponential,
+    "logarithmic": logarithmic,
+    "s-curve": s_curve,
+}
+
+
+@dataclass
+class VestingSchedule:
+    """A discrete schedule the on-chain program can actually execute."""
+
+    preset: str

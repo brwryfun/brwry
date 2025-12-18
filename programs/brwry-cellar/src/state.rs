@@ -12,3 +12,15 @@ pub enum CurveKindTag {
 
 #[account]
 pub struct Cask {
+    pub authority: Pubkey,
+    pub recipient: Pubkey,
+    pub mint: Pubkey,
+    pub vault: Pubkey,
+    pub total_amount: u64,
+    pub released_amount: u64,
+    pub start_ts: i64,
+    pub end_ts: i64,
+    pub cliff_ts: i64,
+    pub curve: CurveKindTag,
+    pub k_milli: u64,
+    pub steepness_milli: u64,

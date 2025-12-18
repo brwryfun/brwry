@@ -29,3 +29,28 @@ carry information.
 | Team salary, ongoing grants | Advisors without a probation |
 | Community rewards paid over time | Anything where a cliff changes the pitch |
 
+---
+
+## Cliff
+
+```
+f(t) = 0,                   t < c
+f(t) = (t - c) / (1 - c),   t >= c
+```
+
+Flat until the cliff, then linear. The default cliff is at `c = 0.25`,
+which is a one-quarter probation. Set `c = 0` to fall back to linear.
+
+| When to reach for it | When to avoid it |
+| --- | --- |
+| Advisors, part-time collaborators | Anyone who needs cash flow from day one |
+| First-time contributors | Grants where a cliff would be read as hostility |
+
+---
+
+## Exponential
+
+```
+f(t) = (exp(k t) - 1) / (exp(k) - 1)
+```
+
