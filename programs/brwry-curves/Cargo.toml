@@ -4,3 +4,8 @@ description = "Unlock curve math shared between the Brwry cellar program and the
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "brwry_curves"

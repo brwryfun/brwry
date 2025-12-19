@@ -20,3 +20,21 @@ pub struct CurveParams {
 }
 
 impl Default for CurveParams {
+    fn default() -> Self {
+        Self {
+            kind: CurveKind::Linear,
+            cliff_at: SCALE / 4,
+            k_milli: 3_000,
+            steepness_milli: 6_000,
+        }
+    }
+}
+
+pub fn sample_curve(params: CurveParams, t: u64) -> u64 {
+    match params.kind {
+        CurveKind::Linear => linear(t),
+        CurveKind::Cliff => cliff(t, params.cliff_at),
+        CurveKind::Exponential => exponential(t, params.k_milli),
+        CurveKind::Logarithmic => logarithmic(t, params.k_milli),
+        CurveKind::SCurve => s_curve(t, params.steepness_milli),
+    }

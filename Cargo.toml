@@ -2,3 +2,7 @@
 members = [
     "programs/brwry-curves",
     "programs/brwry-cellar",
+]
+resolver = "2"
+
+[workspace.package]
