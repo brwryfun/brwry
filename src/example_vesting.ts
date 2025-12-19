@@ -34,3 +34,31 @@ export interface VestingPlan {
 interface StreamflowCreateArgs {
   recipient: PublicKey;
   mint: PublicKey;
+  depositedAmount: bigint;
+  start: number;
+  period: number;
+  cliff: number;
+  cliffAmount: bigint;
+  amountPerPeriod: bigint;
+  name: string;
+  transferableBySender: boolean;
+  transferableByRecipient: boolean;
+  canTopup: boolean;
+  automaticWithdrawal: boolean;
+}
+
+const SECONDS_PER_PERIOD = 24 * 60 * 60; // daily release ticks
+
+function fractionForPreset(preset: UnlockPreset, t: number): number {
+  const clamp = (x: number) => Math.max(0, Math.min(1, x));
+  switch (preset) {
+    case "linear":
+      return clamp(t);
+    case "cliff": {
+      const cliff = 0.25;
+      return t < cliff ? 0 : clamp((t - cliff) / (1 - cliff));
+    }
+    case "exponential": {
+      const k = 3;
+      return clamp((Math.exp(k * clamp(t)) - 1) / (Math.exp(k) - 1));
+    }

@@ -28,3 +28,28 @@ pub struct ReleaseBarrel<'info> {
         seeds = [Schedule::SEED, cask.key().as_ref()],
         bump = schedule.bump,
     )]
+    pub schedule: Account<'info, Schedule>,
+
+    pub mint: InterfaceAccount<'info, Mint>,
+
+    #[account(mut)]
+    pub vault: InterfaceAccount<'info, TokenAccount>,
+
+    #[account(mut, constraint = recipient_ata.owner == recipient.key())]
+    pub recipient_ata: InterfaceAccount<'info, TokenAccount>,
+
+    pub token_program: Interface<'info, TokenInterface>,
+}
+
+pub fn handler(ctx: Context<ReleaseBarrel>) -> Result<()> {
+    let now = Clock::get()?.unix_timestamp;
+    let cask = &mut ctx.accounts.cask;
+    let schedule = &mut ctx.accounts.schedule;
+
+    require!(now >= cask.cliff_ts, BrwryError::NothingToRelease);
+
+    let claimable = compute_claimable(cask, now)?;
+    require!(claimable > 0, BrwryError::NothingToRelease);
+
+    let authority_key = cask.authority;
+    let recipient_key = cask.recipient;
