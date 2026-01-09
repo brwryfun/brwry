@@ -39,3 +39,37 @@ pub fn exponential(t: u64, k_milli: u64) -> u64 {
     let x = (k_scaled * t as u128) / scale;
 
     let numer = expm1_scaled(x);
+    let denom = expm1_scaled(k_scaled);
+    if denom == 0 {
+        return 0;
+    }
+    ((numer * scale) / denom) as u64
+}
+
+pub fn logarithmic(t: u64, k_milli: u64) -> u64 {
+    let t = clamp_scaled(t);
+    let scale = SCALE as u128;
+    let k_scaled = k_milli as u128 * scale / 1000;
+    let kt = (k_scaled * t as u128) / scale;
+
+    let numer = log1p_scaled(kt);
+    let denom = log1p_scaled(k_scaled);
+    if denom == 0 {
+        return 0;
+    }
+    ((numer * scale) / denom) as u64
+}
+
+pub fn s_curve(t: u64, steepness_milli: u64) -> u64 {
+    let t = clamp_scaled(t);
+    let scale = SCALE as i128;
+    let s = steepness_milli as i128 * scale / 1000;
+    let half = scale / 2;
+
+    let arg_t = (s * (t as i128 - half)) / scale;
+    let arg_0 = -s / 2;
+    let arg_1 = s / 2;
+
+    let raw_t = sigmoid_scaled(arg_t);
+    let raw_0 = sigmoid_scaled(arg_0);
+    let raw_1 = sigmoid_scaled(arg_1);

@@ -4,3 +4,7 @@ description = "Brwry cellar on-chain program. Creates vesting casks and releases
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]

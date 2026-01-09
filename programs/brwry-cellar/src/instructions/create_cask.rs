@@ -21,3 +21,22 @@ pub struct CreateCaskParams {
 pub struct CreateCask<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
+
+    pub recipient: SystemAccount<'info>,
+
+    pub mint: InterfaceAccount<'info, Mint>,
+
+    #[account(
+        init,
+        payer = authority,
+        space = Cask::SPACE,
+        seeds = [Cask::SEED, authority.key().as_ref(), recipient.key().as_ref(), mint.key().as_ref()],
+        bump,
+    )]
+    pub cask: Account<'info, Cask>,
+
+    #[account(
+        init,
+        payer = authority,
+        space = Schedule::SPACE,
+        seeds = [Schedule::SEED, cask.key().as_ref()],

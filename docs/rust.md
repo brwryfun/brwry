@@ -18,3 +18,20 @@ use brwry_curves::{sample_curve, CurveKind, CurveParams, SCALE};
 
 let params = CurveParams {
     kind: CurveKind::SCurve,
+    ..Default::default()
+};
+let unlocked = sample_curve(params, SCALE / 2);
+assert!(unlocked > 400_000 && unlocked < 600_000);
+```
+
+Internally the non-linear curves use Taylor-style polynomial approximations
+of `exp - 1` and `log(1 + x)` after an argument reduction to keep the series
+short enough to evaluate on-chain without float. The tests under
+`programs/brwry-curves/tests/curves.rs` cover endpoint behaviour and a few
+midpoint shape properties.
+
+### Running the tests
+
+```bash
+cargo test -p brwry-curves
+```

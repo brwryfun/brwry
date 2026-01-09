@@ -26,4 +26,26 @@ release, never closed.
 | `vault` | `Pubkey` | Token account owned by the cask PDA |
 | `total_amount` | `u64` | Deposit in raw token units |
 | `released_amount` | `u64` | Running total already claimed |
+| `start_ts` | `i64` | Unix second when `t = 0` |
+| `end_ts` | `i64` | Unix second when `t = 1` |
+| `cliff_ts` | `i64` | First moment a release is allowed |
+| `curve` | `CurveKindTag` | One of the five preset tags |
+| `k_milli` | `u64` | Exp/log curvature knob (x1000) |
+| `steepness_milli` | `u64` | S-curve steepness knob (x1000) |
+| `bump` | `u8` | PDA bump |
 
+Seeds: `[b"cask", authority, recipient, mint]`. One cask per
+authority-recipient-mint tuple; that keeps the PDA deterministic so the
+client can always find it again without extra indices.
+
+### `Schedule`
+
+A small side account that tracks release bookkeeping. Separated from `Cask`
+so the hot loop of claims does not fight for space with the immutable
+configuration.
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `cask` | `Pubkey` | Owning cask PDA |
+| `periods` | `u32` | Total number of release buckets |
+| `current_period` | `u32` | Bucket the next claim will occupy |
