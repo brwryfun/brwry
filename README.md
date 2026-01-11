@@ -43,3 +43,39 @@ Brwry treats a vesting stream the way a cellar treats a cask. There is a start d
 ## Features
 
 | Capability | Notes |
+| --- | --- |
+| Five unlock curves | Linear, cliff, exponential, logarithmic, s-curve |
+| Curve designer | Drag-and-drop control points, JSON export |
+| Streamflow integration | Deploy vesting contracts without leaving the app |
+| Token-2022 support | Transfer fee extension, interest-bearing mints, permanent delegate |
+| Cask visualizer | Three.js scene that renders every active stream as a labelled barrel |
+| Telegram whispers | Opt-in alerts when an unlock is within 24h, 1h, or live |
+| Batch streams | Airdrop a cohort under a shared curve with one signature |
+| Multisig-friendly | Every claim step is a standard `VersionedTransaction` |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    U[User Browser] -->|wallet + https| W[web/ Next.js on Vercel]
+    W -->|REST| S[service/ Hono on Railway]
+    W -.->|wallet adapter| C[brwry-cellar program]
+    C -->|Token-2022 CPI| SOL[Solana Mainnet]
+    S -->|RPC| HEL[Helius RPC]
+    S -->|RPC fallback| QN[QuickNode]
+    S -->|SDK| SF[Streamflow]
+    S --> PG[(Postgres)]
+    S --> RD[(Redis)]
+    S -->|cron 5m| TG[Telegram Bot]
+    TG -->|unlock alerts| U
+```
+
+The repository here is a small, readable slice of that system: a Rust workspace that ships the shared curve math as a `no_std` crate and a tiny Anchor program around it, curve math in Python for plotting and sanity-checking, a sketch of the Streamflow call pattern in TypeScript, and the prose that explains when you would reach for each curve.
+
+## Installation
+
+```bash
+git clone https://github.com/brwryfun/brwry.git
+cd brwry
+```
+
