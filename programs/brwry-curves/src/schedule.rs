@@ -38,3 +38,4 @@ pub fn sample_curve(params: CurveParams, t: u64) -> u64 {
         CurveKind::Logarithmic => logarithmic(t, params.k_milli),
         CurveKind::SCurve => s_curve(t, params.steepness_milli),
     }
+
