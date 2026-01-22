@@ -6,3 +6,7 @@ pub enum BrwryError {
     InvalidSchedule,
     #[msg("cliff timestamp must be within the schedule window")]
     CliffOutOfRange,
+    #[msg("total amount must be non-zero")]
+    ZeroAmount,
+    #[msg("nothing is claimable at this moment")]
+    NothingToRelease,

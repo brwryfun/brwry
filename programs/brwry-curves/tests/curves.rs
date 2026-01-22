@@ -31,3 +31,18 @@ fn exponential_boundary_values() {
     assert!(near(exponential(SCALE, 3_000), SCALE));
 }
 
+#[test]
+fn exponential_midpoint_is_below_linear() {
+    let mid = exponential(SCALE / 2, 3_000);
+    assert!(mid < SCALE / 2, "exp at t=0.5 should be below linear, got {mid}");
+}
+
+#[test]
+fn logarithmic_boundary_values() {
+    assert!(near(logarithmic(0, 4_000), 0));
+    assert!(near(logarithmic(SCALE, 4_000), SCALE));
+}
+
+#[test]
+fn logarithmic_midpoint_is_above_linear() {
+    let mid = logarithmic(SCALE / 2, 4_000);

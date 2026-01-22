@@ -56,3 +56,30 @@ def ascii_cask(cask: Cask) -> str:
 
     label = f" {cask.preset.upper():<10}  {cask.fill * 100:5.1f}% aged "
     lines.append(label.center(COLS + 4))
+    return "\n".join(lines)
+
+
+def plot_cask(cask: Cask, path: str = "cask.svg") -> None:
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.patches as patches
+        import matplotlib.pyplot as plt
+    except ImportError as exc:
+        raise SystemExit(
+            "matplotlib is not installed. run: pip install matplotlib"
+        ) from exc
+
+    fig, ax = plt.subplots(figsize=(4, 6))
+    ax.set_xlim(0, 4)
+    ax.set_ylim(0, 6)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    # Barrel staves.
+    stave = patches.Rectangle((0.6, 0.4), 2.8, 5.2, facecolor="#3D2817", edgecolor="#1a0f08", linewidth=2)
+    ax.add_patch(stave)
+
+    # Amber fill.
+    fill_height = cask.fill * 4.6
