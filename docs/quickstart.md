@@ -34,3 +34,19 @@ The JSON export button writes a minimal schema:
 
 ```json
 {
+  "preset": "s-curve",
+  "months": 18,
+  "cliffMonths": 1,
+  "totalTokens": "1000000000000",
+  "steepness": 6
+}
+```
+
+Keep this file. It is the source of truth for the stream.
+
+## 4. Mint the stream
+
+Under **Vest**, paste the JSON and add the recipient's wallet. The form
+validates three things before it lets you sign:
+
+1. The mint has enough unlocked tokens in your wallet.

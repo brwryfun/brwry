@@ -10,3 +10,9 @@ brwry_cellar = "Brwry11111111111111111111111111111111111111"
 
 [programs.devnet]
 brwry_cellar = "Brwry11111111111111111111111111111111111111"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
