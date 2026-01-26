@@ -38,4 +38,21 @@ pub fn sample_curve(params: CurveParams, t: u64) -> u64 {
         CurveKind::Logarithmic => logarithmic(t, params.k_milli),
         CurveKind::SCurve => s_curve(t, params.steepness_milli),
     }
+}
 
+pub fn sample_schedule(
+    params: CurveParams,
+    total_tokens: u128,
+    start_unix: i64,
+    end_unix: i64,
+    periods: u32,
+) -> Vec<(i64, u128)> {
+    let mut out = Vec::with_capacity(periods as usize);
+    if periods == 0 || end_unix <= start_unix {
+        return out;
+    }
+    let duration = (end_unix - start_unix) as u128;
+    let mut previous: u128 = 0;
+    for i in 1..=periods {
+        let t = ((i as u128) * SCALE as u128) / periods as u128;
+        let frac = sample_curve(params, t as u64) as u128;

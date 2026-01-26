@@ -54,3 +54,28 @@ which is a one-quarter probation. Set `c = 0` to fall back to linear.
 f(t) = (exp(k t) - 1) / (exp(k) - 1)
 ```
 
+Slow start, steep finish. The default `k = 3` is a good balance; increase
+it for more aggressive reveal. This is the curve to use when you want the
+market to feel a late push rather than a gradual drift.
+
+| When to reach for it | When to avoid it |
+| --- | --- |
+| Long-term treasury reveal | Liquidity bootstrapping |
+| Founders who want to stay deeply aligned | Anyone with near-term cash needs |
+
+---
+
+## Logarithmic
+
+```
+f(t) = log(1 + k t) / log(1 + k)
+```
+
+Fast start, long tail. The mirror of the exponential curve. The default
+`k = 4` releases about 40% in the first quarter and spends the rest of
+the schedule walking the remainder out.
+
+| When to reach for it | When to avoid it |
+| --- | --- |
+| Airdrops, liquidity bootstrapping | Long-term alignment |
+| Campaigns that need early visibility | Anything that is trying to signal patience |

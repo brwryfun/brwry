@@ -49,3 +49,26 @@ configuration.
 | `cask` | `Pubkey` | Owning cask PDA |
 | `periods` | `u32` | Total number of release buckets |
 | `current_period` | `u32` | Bucket the next claim will occupy |
+| `last_claim_ts` | `i64` | Most recent release timestamp |
+| `bump` | `u8` | PDA bump |
+
+Seeds: `[b"schedule", cask]`.
+
+## Instructions
+
+### `create_cask`
+
+Creates both PDAs, allocates the vault, writes parameters. All validation
+happens up front: `start < end`, `cliff` within the window, `k_milli` and
+`steepness_milli` below 20x. The vault is initialised with `cask` as its
+authority so no one but the program can move tokens out.
+
+Important: the instruction does not move any tokens. The caller is expected
+to deposit the `total_amount` into the vault immediately afterwards, in a
+separate instruction. Splitting the two lets the client keep the deposit
+as a routine `transfer_checked` rather than a custom CPI, which matters for
+Token-2022 mints that carry transfer fees or permanent delegates.
+
+### `release_barrel`
+
+Compares `now` to `start_ts`, `cliff_ts`, and `end_ts`, computes the scaled

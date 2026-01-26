@@ -6,3 +6,7 @@ node_modules/
 .env.local
 *.log
 .idea/
+.vscode/
+dist/
+build/
+coverage/

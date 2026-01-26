@@ -73,3 +73,36 @@ pub fn s_curve(t: u64, steepness_milli: u64) -> u64 {
     let raw_t = sigmoid_scaled(arg_t);
     let raw_0 = sigmoid_scaled(arg_0);
     let raw_1 = sigmoid_scaled(arg_1);
+
+    if raw_1 == raw_0 {
+        return 0;
+    }
+    let numer = raw_t - raw_0;
+    let denom = raw_1 - raw_0;
+    ((numer * scale) / denom).max(0).min(scale) as u64
+}
+
+fn expm1_scaled(x: u128) -> u128 {
+    let scale = SCALE as u128;
+    if x == 0 {
+        return 0;
+    }
+    let mut term = x;
+    let mut sum = x;
+    let mut n: u128 = 2;
+    while n <= 18 {
+        term = (term * x) / (scale * n);
+        if term == 0 {
+            break;
+        }
+        sum += term;
+        n += 1;
+    }
+    sum
+}
+
+fn log1p_scaled(x: u128) -> u128 {
+    // log(1 + x) via atanh identity: log(1 + x) = 2 * atanh(x / (2 + x)).
+    let scale = SCALE as u128;
+    if x == 0 {
+        return 0;

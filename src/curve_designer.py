@@ -69,3 +69,34 @@ class VestingSchedule:
     """A discrete schedule the on-chain program can actually execute."""
 
     preset: str
+    months: int
+    total_tokens: int
+
+    def points(self, samples: int = 200) -> list[tuple[float, float]]:
+        curve = PRESETS[self.preset]
+        return [(i / samples, curve(i / samples)) for i in range(samples + 1)]
+
+    def monthly(self) -> list[tuple[int, float, int]]:
+        curve = PRESETS[self.preset]
+        out: list[tuple[int, float, int]] = []
+        previous = 0
+        for m in range(1, self.months + 1):
+            t = m / self.months
+            fraction = curve(t)
+            released = round(self.total_tokens * fraction)
+            out.append((m, fraction, released - previous))
+            previous = released
+        return out
+
+
+def plot(preset: str, months: int, path: str = "curve.svg") -> None:
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except ImportError as exc:
+        raise SystemExit(
+            "matplotlib is not installed. run: pip install matplotlib"
+        ) from exc
+
