@@ -39,3 +39,21 @@ fn main() -> ExitCode {
             "--periods" => periods = iter.next().and_then(|v| v.parse().ok()).unwrap_or(periods),
             "-h" | "--help" => {
                 usage();
+                return ExitCode::SUCCESS;
+            }
+            other => {
+                eprintln!("unknown flag: {other}");
+                usage();
+                return ExitCode::from(2);
+            }
+        }
+    }
+
+    let kind = match parse_curve(&curve) {
+        Some(k) => k,
+        None => {
+            eprintln!("unknown curve: {curve}");
+            usage();
+            return ExitCode::from(2);
+        }
+    };

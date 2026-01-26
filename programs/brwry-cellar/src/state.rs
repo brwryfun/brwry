@@ -24,3 +24,15 @@ pub struct Cask {
     pub curve: CurveKindTag,
     pub k_milli: u64,
     pub steepness_milli: u64,
+    pub bump: u8,
+}
+
+impl Cask {
+    pub const SEED: &'static [u8] = b"cask";
+    pub const SPACE: usize = 8 + 32 * 4 + 8 * 6 + 8 + 8 + 1 + 1 + 32;
+
+    pub fn progress_scaled(&self, now: i64) -> u64 {
+        if now <= self.start_ts {
+            return 0;
+        }
+        if now >= self.end_ts {

@@ -40,3 +40,22 @@ pub struct CreateCask<'info> {
         payer = authority,
         space = Schedule::SPACE,
         seeds = [Schedule::SEED, cask.key().as_ref()],
+        bump,
+    )]
+    pub schedule: Account<'info, Schedule>,
+
+    #[account(
+        init,
+        payer = authority,
+        token::mint = mint,
+        token::authority = cask,
+    )]
+    pub vault: InterfaceAccount<'info, TokenAccount>,
+
+    pub token_program: Interface<'info, TokenInterface>,
+    pub system_program: Program<'info, System>,
+    pub rent: Sysvar<'info, Rent>,
+}
+
+pub fn handler(ctx: Context<CreateCask>, params: CreateCaskParams) -> Result<()> {
+    require!(params.total_amount > 0, BrwryError::ZeroAmount);
