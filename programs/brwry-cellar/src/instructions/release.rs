@@ -53,4 +53,27 @@ pub fn handler(ctx: Context<ReleaseBarrel>) -> Result<()> {
 
     let authority_key = cask.authority;
     let recipient_key = cask.recipient;
+    let mint_key = cask.mint;
+    let bump = cask.bump;
+    let seeds: &[&[u8]] = &[
+        Cask::SEED,
+        authority_key.as_ref(),
+        recipient_key.as_ref(),
+        mint_key.as_ref(),
+        core::slice::from_ref(&bump),
+    ];
+    let signer = &[seeds];
 
+    let cpi = CpiContext::new_with_signer(
+        ctx.accounts.token_program.to_account_info(),
+        TransferChecked {
+            from: ctx.accounts.vault.to_account_info(),
+            mint: ctx.accounts.mint.to_account_info(),
+            to: ctx.accounts.recipient_ata.to_account_info(),
+            authority: cask.to_account_info(),
+        },
+        signer,
+    );
+    transfer_checked(cpi, claimable, ctx.accounts.mint.decimals)?;
+
+    cask.released_amount = cask

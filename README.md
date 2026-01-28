@@ -79,3 +79,39 @@ git clone https://github.com/brwryfun/brwry.git
 cd brwry
 ```
 
+Python demos (curve plotting):
+
+```bash
+python -m venv .venv
+source .venv/bin/activate    # Windows: .venv\Scripts\activate
+pip install numpy matplotlib
+python src/curve_designer.py
+python src/cask_visualizer.py
+```
+
+TypeScript sketch (vesting call pattern):
+
+```bash
+npm install --save @solana/web3.js @streamflow/stream
+npx ts-node src/example_vesting.ts
+```
+
+The TypeScript example does not sign or broadcast. It builds a stream config, prints the parameters Streamflow expects, and returns. Real deployment happens from the web client with a connected wallet.
+
+Rust curve crate (shared with the on-chain program):
+
+```bash
+cargo check -p brwry-curves
+cargo test -p brwry-curves
+cargo run --bin cask_cli -- --curve s-curve --total 1000000 --start 0 --end 31536000 --periods 12
+```
+
+The Anchor program under `programs/brwry-cellar` uses the curves crate with `default-features = false` so it builds clean to BPF. A placeholder program id ships in `Anchor.toml`; replace it with the id your toolchain prints before deploying.
+
+## Unlock curves at a glance
+
+| Curve | Shape | When to use |
+| --- | --- | --- |
+| Linear | Straight line from zero to full | Payroll, simple team vests |
+| Cliff | Flat then linear after the cliff | Advisors with a probation period |
+| Exponential | Slow start, steep finish | Long-term treasury reveal |

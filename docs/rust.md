@@ -35,3 +35,19 @@ midpoint shape properties.
 ```bash
 cargo test -p brwry-curves
 ```
+
+### The cask CLI
+
+A small binary prints a release schedule to stdout. The `--curve` flag
+accepts the five preset names, `--total` is in raw token units, and the
+`--start` and `--end` flags are Unix timestamps.
+
+```bash
+cargo run --bin cask_cli -- \
+    --curve s-curve \
+    --total 1000000 \
+    --start 1735689600 \
+    --end 1767225600 \
+    --periods 12
+```
+

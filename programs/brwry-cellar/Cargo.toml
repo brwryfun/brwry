@@ -8,4 +8,8 @@ license.workspace = true
 repository.workspace = true
 
 [lib]
+crate-type = ["cdylib", "lib"]
+name = "brwry_cellar"
 
+[features]
+no-entrypoint = []
