@@ -77,3 +77,4 @@ pub fn handler(ctx: Context<ReleaseBarrel>) -> Result<()> {
     transfer_checked(cpi, claimable, ctx.accounts.mint.decimals)?;
 
     cask.released_amount = cask
+
