@@ -14,3 +14,4 @@ path = "src/lib.rs"
 [[bin]]
 name = "cask_cli"
 path = "src/bin/cask_cli.rs"
+
