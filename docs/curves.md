@@ -79,3 +79,4 @@ the schedule walking the remainder out.
 | --- | --- |
 | Airdrops, liquidity bootstrapping | Long-term alignment |
 | Campaigns that need early visibility | Anything that is trying to signal patience |
+
