@@ -51,3 +51,20 @@ cargo run --bin cask_cli -- \
     --periods 12
 ```
 
+The output columns are period number, release timestamp, amount released
+that period, and the running unlocked percentage.
+
+## Fixed-point conventions
+
+Every parameter on the curve API is a positive integer. There is no `f64`
+anywhere in the public surface. The Taylor series evaluate in `u128` and
+return `u64`; the `SCALE` constant is the implicit denominator for every
+returned value.
+
+- `t`: `u64` in `[0, SCALE]`
+- `cliff_at`: `u64` in `[0, SCALE]`
+- `k_milli`: `u64`, the curvature knob multiplied by 1000
+- `steepness_milli`: `u64`, the s-curve steepness multiplied by 1000
+- return value: `u64` in `[0, SCALE]`, representing the fraction unlocked
+
+The on-chain program converts its `i64` timestamps into `t` using

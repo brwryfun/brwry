@@ -56,3 +56,21 @@ pub fn sample_schedule(
     for i in 1..=periods {
         let t = ((i as u128) * SCALE as u128) / periods as u128;
         let frac = sample_curve(params, t as u64) as u128;
+        let released = (total_tokens * frac) / SCALE as u128;
+        let delta = released.saturating_sub(previous);
+        previous = released;
+        let ts = start_unix + ((i as u128 * duration) / periods as u128) as i64;
+        out.push((ts, delta));
+    }
+    out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn schedule_periods_sum_to_total() {
+        let params = CurveParams {
+            kind: CurveKind::SCurve,
+            ..Default::default()

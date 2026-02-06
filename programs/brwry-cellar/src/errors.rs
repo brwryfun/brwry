@@ -10,3 +10,7 @@ pub enum BrwryError {
     ZeroAmount,
     #[msg("nothing is claimable at this moment")]
     NothingToRelease,
+    #[msg("only the recipient may release from this cask")]
+    UnauthorizedRecipient,
+    #[msg("curve parameters are outside supported bounds")]
+    CurveOutOfBounds,

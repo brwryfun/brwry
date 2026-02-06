@@ -50,3 +50,19 @@ Under **Vest**, paste the JSON and add the recipient's wallet. The form
 validates three things before it lets you sign:
 
 1. The mint has enough unlocked tokens in your wallet.
+2. The recipient is a valid Solana address.
+3. The curve compiles.
+
+Sign with the connected wallet. The confirmation screen shows the
+Streamflow address of the new stream. Bookmark it. That address is what
+you hand to the recipient.
+
+## 5. Turn on whispers
+
+Optional, but the point of the service. At `brwry.fun/whispers`, paste
+the stream address and link your Telegram account. The watcher sends
+three messages per unlock milestone: 24 hours before, one hour before,
+and at the moment of release. You can mute by responding `/quiet` to the
+bot, or walk away by responding `/remove`.
+
+---

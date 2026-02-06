@@ -115,3 +115,39 @@ The Anchor program under `programs/brwry-cellar` uses the curves crate with `def
 | Linear | Straight line from zero to full | Payroll, simple team vests |
 | Cliff | Flat then linear after the cliff | Advisors with a probation period |
 | Exponential | Slow start, steep finish | Long-term treasury reveal |
+| Logarithmic | Fast start, long tail | Liquidity bootstrapping, airdrops |
+| S-curve | Slow, fast, slow | Balanced founder grants, ecosystem funds |
+
+The math for each curve lives in `docs/curves.md`. The same formulas are implemented identically on-chain, in the service layer, and in the Python demos here, so a curve you draw in the designer renders the same everywhere.
+
+## Usage
+
+The shortest possible path:
+
+1. Pick a curve in the designer at `brwry.fun/visualizer`.
+2. Drop control points until the cellar shape matches your intent.
+3. Export JSON.
+4. Paste into the vesting form at `brwry.fun/vest`, sign with Phantom or Solflare.
+5. Turn on Telegram whispers if you want to hear from the cellar.
+
+Or, to just look at a curve locally:
+
+```bash
+python src/curve_designer.py --preset s-curve --months 18
+```
+
+That writes an SVG to the working directory and prints the discrete cliff table that Streamflow will receive.
+
+## Repository layout
+
+```
+.
+|-- assets/                    banner and logo for the README
+|-- programs/
+|   |-- brwry-curves/          no_std fixed-point curve math + cask_cli
+|   |   |-- src/lib.rs         five presets in u128 arithmetic
+|   |   |-- src/schedule.rs    sample_curve + sample_schedule
+|   |   |-- src/bin/cask_cli.rs prints a release table to stdout
+|   |   `-- tests/curves.rs    boundary tests for every preset
+|   `-- brwry-cellar/          Anchor 0.29 program around the curves crate
+|       |-- src/lib.rs         program entry, instruction dispatchers

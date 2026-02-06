@@ -36,4 +36,15 @@ impl Cask {
             return 0;
         }
         if now >= self.end_ts {
+            return brwry_curves::SCALE;
+        }
+        let elapsed = (now - self.start_ts) as u128;
+        let total = (self.end_ts - self.start_ts) as u128;
+        ((elapsed * brwry_curves::SCALE as u128) / total) as u64
+    }
+}
 
+#[account]
+pub struct Schedule {
+    pub cask: Pubkey,
+    pub periods: u32,
