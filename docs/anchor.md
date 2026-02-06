@@ -72,3 +72,25 @@ Token-2022 mints that carry transfer fees or permanent delegates.
 ### `release_barrel`
 
 Compares `now` to `start_ts`, `cliff_ts`, and `end_ts`, computes the scaled
+progress `t`, samples the curve, and derives the amount claimable since the
+last release. If non-zero it CPIs into `transfer_checked` on the token
+program bound to the mint (SPL or Token-2022), signs with the cask PDA,
+and bumps bookkeeping.
+
+The curve math on-chain is a direct call into the `brwry-curves` crate, so
+the fraction computed here matches the fraction shown in the designer for
+the same `t` to the last unit of `SCALE`.
+
+## Token-2022 notes
+
+The instruction uses `InterfaceAccount` and `TokenInterface` so the same
+binary supports both `spl-token` and `spl-token-2022`. When the mint has a
+transfer fee extension the recipient receives the post-fee amount, not the
+pre-fee amount; nothing special happens on our side. For interest-bearing
+mints the `total_amount` baseline is fixed at deposit time and any accrued
+interest stays in the vault as a surplus after the final claim.
+
+Do not mix extensions that interact badly with fixed curves (confidential
+transfers, permanent delegate) without testing against devnet first. None
+of those are blocked by the program, but neither are any of them
+meaningful to the vesting guarantee.

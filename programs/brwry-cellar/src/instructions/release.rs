@@ -77,3 +77,28 @@ pub fn handler(ctx: Context<ReleaseBarrel>) -> Result<()> {
     transfer_checked(cpi, claimable, ctx.accounts.mint.decimals)?;
 
     cask.released_amount = cask
+        .released_amount
+        .checked_add(claimable)
+        .ok_or(BrwryError::MathOverflow)?;
+    schedule.last_claim_ts = now;
+    schedule.current_period = schedule.current_period.saturating_add(1);
+
+    Ok(())
+}
+
+fn compute_claimable(cask: &Cask, now: i64) -> Result<u64> {
+    let params = CurveParams {
+        kind: match cask.curve {
+            CurveKindTag::Linear => CurveKind::Linear,
+            CurveKindTag::Cliff => CurveKind::Cliff,
+            CurveKindTag::Exponential => CurveKind::Exponential,
+            CurveKindTag::Logarithmic => CurveKind::Logarithmic,
+            CurveKindTag::SCurve => CurveKind::SCurve,
+        },
+        cliff_at: cliff_scaled(cask),
+        k_milli: cask.k_milli,
+        steepness_milli: cask.steepness_milli,
+    };
+
+    let t = cask.progress_scaled(now);
+    let fraction = sample_curve(params, t) as u128;
