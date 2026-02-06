@@ -46,3 +46,17 @@ fn logarithmic_boundary_values() {
 #[test]
 fn logarithmic_midpoint_is_above_linear() {
     let mid = logarithmic(SCALE / 2, 4_000);
+    assert!(mid > SCALE / 2, "log at t=0.5 should be above linear, got {mid}");
+}
+
+#[test]
+fn s_curve_boundary_values() {
+    assert!(near(s_curve(0, 6_000), 0));
+    assert!(near(s_curve(SCALE, 6_000), SCALE));
+}
+
+#[test]
+fn s_curve_midpoint_is_half() {
+    let mid = s_curve(SCALE / 2, 6_000);
+    assert!(near(mid, SCALE / 2), "s-curve at t=0.5 should be ~0.5, got {mid}");
+}

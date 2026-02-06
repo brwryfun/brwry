@@ -106,3 +106,36 @@ fn log1p_scaled(x: u128) -> u128 {
     let scale = SCALE as u128;
     if x == 0 {
         return 0;
+    }
+    let z = (x * scale) / (2 * scale + x);
+    let z2 = (z * z) / scale;
+    let mut term = z;
+    let mut sum = z;
+    let mut n: u128 = 3;
+    while n <= 25 {
+        term = (term * z2) / scale;
+        let add = term / n;
+        if add == 0 {
+            break;
+        }
+        sum += add;
+        n += 2;
+    }
+    2 * sum
+}
+
+fn sigmoid_scaled(x: i128) -> i128 {
+    // 1 / (1 + e^{-x}) on signed scale. Uses expm1_scaled on |x|.
+    let scale = SCALE as i128;
+    if x >= 0 {
+        let ex_m1 = expm1_scaled(x as u128) as i128;
+        let ex = ex_m1 + scale;
+        (ex * scale) / (scale + ex)
+    } else {
+        let ex_m1 = expm1_scaled((-x) as u128) as i128;
+        let ex_neg = (scale * scale) / (scale + ex_m1);
+        (scale * scale) / (scale + ex_neg)
+    }
+}
+
+#[cfg(test)]

@@ -15,3 +15,8 @@ pub mod brwry_cellar {
     use super::*;
 
     pub fn create_cask(
+        ctx: Context<CreateCask>,
+        params: CreateCaskParams,
+    ) -> Result<()> {
+        instructions::create_cask::handler(ctx, params)
+    }
