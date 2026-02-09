@@ -100,3 +100,35 @@ def plot(preset: str, months: int, path: str = "curve.svg") -> None:
             "matplotlib is not installed. run: pip install matplotlib"
         ) from exc
 
+    schedule = VestingSchedule(preset=preset, months=months, total_tokens=1_000_000)
+    xs, ys = zip(*schedule.points())
+
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+    ax.plot(xs, ys, color="#C8862F", linewidth=2.2)
+    ax.fill_between(xs, 0, ys, color="#C8862F", alpha=0.15)
+    ax.set_title(f"{preset} -- {months} months", color="#3D2817")
+    ax.set_xlabel("time (0 -> 1)", color="#3D2817")
+    ax.set_ylabel("fraction unlocked", color="#3D2817")
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1.02)
+    ax.grid(True, color="#6B5D52", alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(path)
+    plt.close(fig)
+
+
+def print_monthly_table(preset: str, months: int) -> None:
+    schedule = VestingSchedule(preset=preset, months=months, total_tokens=1_000_000)
+    print(f"preset        {preset}")
+    print(f"months        {months}")
+    print(f"total tokens  {schedule.total_tokens:,}")
+    print()
+    print(f"{'month':>5}  {'unlocked %':>10}  {'released this month':>22}")
+    for month, fraction, delta in schedule.monthly():
+        print(f"{month:>5}  {fraction * 100:>9.2f}%  {delta:>22,}")
+
+
+def main(argv: Iterable[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="plot a Brwry unlock curve")
+    parser.add_argument(
+        "--preset",

@@ -91,3 +91,32 @@ export function toStreamflowArgs(plan: VestingPlan): StreamflowCreateArgs {
   // these buckets to match the preset exactly when the recipient claims.
   const t = cliffSeconds / plan.durationSeconds;
   const cliffFraction = fractionForPreset(plan.preset, t);
+  const cliffAmount =
+    plan.totalAmount *
+    BigInt(Math.round(cliffFraction * 1_000_000)) /
+    1_000_000n;
+
+  return {
+    recipient: new PublicKey(plan.recipient),
+    mint: new PublicKey(plan.mint),
+    depositedAmount: plan.totalAmount,
+    start: plan.startUnixSeconds,
+    period: SECONDS_PER_PERIOD,
+    cliff: plan.startUnixSeconds + cliffSeconds,
+    cliffAmount,
+    amountPerPeriod,
+    name: `brwry:${plan.preset}`,
+    transferableBySender: false,
+    transferableByRecipient: plan.canTransfer ?? false,
+    canTopup: plan.canTopUp ?? false,
+    automaticWithdrawal: false,
+  };
+}
+
+function demo(): void {
+  const plan: VestingPlan = {
+    recipient: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+    mint: "So11111111111111111111111111111111111111112",
+    totalAmount: 1_000_000_000_000n,
+    startUnixSeconds: Math.floor(Date.now() / 1000),
+    durationSeconds: 12 * 30 * 24 * 60 * 60,

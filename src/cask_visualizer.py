@@ -83,3 +83,29 @@ def plot_cask(cask: Cask, path: str = "cask.svg") -> None:
 
     # Amber fill.
     fill_height = cask.fill * 4.6
+    amber = patches.Rectangle((0.8, 0.6), 2.4, fill_height, facecolor="#C8862F", alpha=0.85)
+    ax.add_patch(amber)
+
+    # Brass bands.
+    for y in (1.1, 3.0, 4.9):
+        band = patches.Rectangle((0.55, y), 2.9, 0.18, facecolor="#B8860B", edgecolor="#6B5D52", linewidth=0.5)
+        ax.add_patch(band)
+
+    # Chalk label.
+    ax.text(
+        2.0,
+        0.15,
+        f"{cask.preset.upper()}  |  {cask.fill * 100:.1f}%",
+        ha="center",
+        va="center",
+        color="#F0EAD6",
+        fontsize=11,
+        family="monospace",
+    )
+
+    fig.tight_layout()
+    fig.savefig(path, facecolor="#0E0906")
+    plt.close(fig)
+
+
+def main() -> int:

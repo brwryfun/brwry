@@ -59,3 +59,21 @@ pub struct CreateCask<'info> {
 
 pub fn handler(ctx: Context<CreateCask>, params: CreateCaskParams) -> Result<()> {
     require!(params.total_amount > 0, BrwryError::ZeroAmount);
+    require!(params.start_ts < params.end_ts, BrwryError::InvalidSchedule);
+    require!(
+        params.cliff_ts >= params.start_ts && params.cliff_ts <= params.end_ts,
+        BrwryError::CliffOutOfRange,
+    );
+    require!(params.k_milli <= 20_000, BrwryError::CurveOutOfBounds);
+    require!(params.steepness_milli <= 20_000, BrwryError::CurveOutOfBounds);
+    require!(params.periods > 0, BrwryError::InvalidSchedule);
+
+    let cask = &mut ctx.accounts.cask;
+    cask.authority = ctx.accounts.authority.key();
+    cask.recipient = ctx.accounts.recipient.key();
+    cask.mint = ctx.accounts.mint.key();
+    cask.vault = ctx.accounts.vault.key();
+    cask.total_amount = params.total_amount;
+    cask.released_amount = 0;
+    cask.start_ts = params.start_ts;
+    cask.end_ts = params.end_ts;
