@@ -57,3 +57,22 @@ fn main() -> ExitCode {
             return ExitCode::from(2);
         }
     };
+
+    let params = CurveParams {
+        kind,
+        ..Default::default()
+    };
+    let plan = sample_schedule(params, total, start, end, periods);
+    let scale = SCALE as u128;
+
+    println!("curve     {curve}");
+    println!("total     {total}");
+    println!("periods   {periods}");
+    println!("start     {start}");
+    println!("end       {end}");
+    println!();
+    println!("{:>6}  {:>12}  {:>14}", "period", "unix_ts", "released");
+
+    let mut running: u128 = 0;
+    for (i, (ts, delta)) in plan.iter().enumerate() {
+        running += *delta;

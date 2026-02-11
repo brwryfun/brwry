@@ -80,3 +80,28 @@ the schedule walking the remainder out.
 | Airdrops, liquidity bootstrapping | Long-term alignment |
 | Campaigns that need early visibility | Anything that is trying to signal patience |
 
+---
+
+## S-curve
+
+```
+raw(x) = 1 / (1 + exp(-s (x - 0.5)))
+f(t)   = (raw(t) - raw(0)) / (raw(1) - raw(0))
+```
+
+A logistic curve centered at `t = 0.5`, normalized so `f(0) = 0` and
+`f(1) = 1`. The default steepness `s = 6` gives a familiar slow-fast-slow
+shape. Most balanced presets settle on this.
+
+| When to reach for it | When to avoid it |
+| --- | --- |
+| Balanced founder grants | Situations where a cliff is more honest |
+| Ecosystem funds with staged goals | Grants shorter than three months |
+
+---
+
+## Picking a curve without reading the math
+
+If you cannot remember which is which, the picker below tends to work:
+
+1. Is there a probation period before vesting starts? **Cliff**.
