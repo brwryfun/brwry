@@ -66,4 +66,3 @@ and at the moment of release. You can mute by responding `/quiet` to the
 bot, or walk away by responding `/remove`.
 
 ---
-
