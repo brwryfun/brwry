@@ -1,0 +1,1 @@
+reread the quickstart aloud.
