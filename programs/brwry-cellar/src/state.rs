@@ -48,4 +48,12 @@ impl Cask {
 pub struct Schedule {
     pub cask: Pubkey,
     pub periods: u32,
+    pub current_period: u32,
+    pub last_claim_ts: i64,
+    pub bump: u8,
+}
 
+impl Schedule {
+    pub const SEED: &'static [u8] = b"schedule";
+    pub const SPACE: usize = 8 + 32 + 4 + 4 + 8 + 1 + 32;
+}

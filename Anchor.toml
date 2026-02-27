@@ -21,3 +21,8 @@ wallet = "~/.config/solana/id.json"
 [scripts]
 test = "cargo test -p brwry-curves --tests"
 
+[workspace]
+members = [
+    "programs/brwry-curves",
+    "programs/brwry-cellar",
+]

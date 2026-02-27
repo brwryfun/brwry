@@ -21,3 +21,7 @@ pub mod brwry_cellar {
         instructions::create_cask::handler(ctx, params)
     }
 
+    pub fn release_barrel(ctx: Context<ReleaseBarrel>) -> Result<()> {
+        instructions::release::handler(ctx)
+    }
+}
