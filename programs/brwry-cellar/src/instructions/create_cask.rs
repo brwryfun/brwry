@@ -77,3 +77,18 @@ pub fn handler(ctx: Context<CreateCask>, params: CreateCaskParams) -> Result<()>
     cask.released_amount = 0;
     cask.start_ts = params.start_ts;
     cask.end_ts = params.end_ts;
+    cask.cliff_ts = params.cliff_ts;
+    cask.curve = params.curve;
+    cask.k_milli = params.k_milli;
+    cask.steepness_milli = params.steepness_milli;
+    cask.bump = ctx.bumps.cask;
+
+    let schedule = &mut ctx.accounts.schedule;
+    schedule.cask = cask.key();
+    schedule.periods = params.periods;
+    schedule.current_period = 0;
+    schedule.last_claim_ts = 0;
+    schedule.bump = ctx.bumps.schedule;
+
+    Ok(())
+}

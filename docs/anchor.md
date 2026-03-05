@@ -94,3 +94,21 @@ Do not mix extensions that interact badly with fixed curves (confidential
 transfers, permanent delegate) without testing against devnet first. None
 of those are blocked by the program, but neither are any of them
 meaningful to the vesting guarantee.
+
+## CPI surface
+
+Only one CPI: `anchor_spl::token_interface::transfer_checked`. Nothing
+calls out to Streamflow, Jupiter, or anyone else from the program itself.
+The service layer is where external SDKs live.
+
+## Errors
+
+Defined in `errors.rs`:
+
+- `InvalidSchedule`
+- `CliffOutOfRange`
+- `ZeroAmount`
+- `NothingToRelease`
+- `UnauthorizedRecipient`
+- `CurveOutOfBounds`
+- `MathOverflow`
