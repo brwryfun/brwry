@@ -132,3 +132,27 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="plot a Brwry unlock curve")
     parser.add_argument(
         "--preset",
+        default="s-curve",
+        choices=sorted(PRESETS.keys()),
+        help="curve to plot",
+    )
+    parser.add_argument("--months", type=int, default=12, help="duration in months")
+    parser.add_argument("--out", default="curve.svg", help="output svg path")
+    parser.add_argument(
+        "--no-plot",
+        action="store_true",
+        help="skip plotting (useful when matplotlib is not installed)",
+    )
+    args = parser.parse_args(list(argv) if argv is not None else None)
+
+    print_monthly_table(args.preset, args.months)
+
+    if not args.no_plot:
+        plot(args.preset, args.months, args.out)
+        print(f"\nwrote {args.out}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

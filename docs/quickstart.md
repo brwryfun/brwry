@@ -66,3 +66,16 @@ and at the moment of release. You can mute by responding `/quiet` to the
 bot, or walk away by responding `/remove`.
 
 ---
+
+## What actually happens on chain
+
+The designer compiles your JSON into a monotone discrete function. The
+service layer calls Streamflow's `create` with a `cliffAmount` that
+matches the curve at the cliff boundary, an `amountPerPeriod` that
+corresponds to the straight-line minimum, and a `name` that carries the
+preset label. The on-chain program then uses Brwry's curve-aware
+rebalancing to serve the correct unlocked amount on every claim.
+
+The practical effect is that the recipient never sees "available to
+claim" jitter. Every call to the program returns a number that matches
+what the designer showed you on day one.

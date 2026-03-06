@@ -76,3 +76,17 @@ fn main() -> ExitCode {
     let mut running: u128 = 0;
     for (i, (ts, delta)) in plan.iter().enumerate() {
         running += *delta;
+        let pct = (running * 10_000) / total.max(1);
+        println!(
+            "{:>6}  {:>12}  {:>14}   {}.{:02}%",
+            i + 1,
+            ts,
+            delta,
+            pct / 100,
+            pct % 100
+        );
+        let _ = scale;
+    }
+
+    ExitCode::SUCCESS
+}
