@@ -60,3 +60,15 @@ fn s_curve_midpoint_is_half() {
     let mid = s_curve(SCALE / 2, 6_000);
     assert!(near(mid, SCALE / 2), "s-curve at t=0.5 should be ~0.5, got {mid}");
 }
+
+#[test]
+fn sample_curve_dispatches_by_kind() {
+    let params = CurveParams {
+        kind: CurveKind::Linear,
+        ..Default::default()
+    };
+    let plan = sample_schedule(params, 1_000, 0, 120, 12);
+    assert_eq!(plan.len(), 12);
+    let sum: u128 = plan.iter().map(|(_, a)| *a).sum();
+    assert!(sum <= 1_000);
+}

@@ -109,3 +109,23 @@ def plot_cask(cask: Cask, path: str = "cask.svg") -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="render an aging cask")
+    parser.add_argument("--preset", default="s-curve", choices=sorted(PRESETS.keys()))
+    parser.add_argument("--months", type=int, default=12)
+    parser.add_argument("--elapsed", type=int, default=6)
+    parser.add_argument("--out", default="cask.svg")
+    parser.add_argument("--no-plot", action="store_true")
+    args = parser.parse_args()
+
+    cask = Cask(preset=args.preset, months=args.months, elapsed_months=args.elapsed)
+    print(ascii_cask(cask))
+
+    if not args.no_plot:
+        plot_cask(cask, args.out)
+        print(f"\nwrote {args.out}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

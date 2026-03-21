@@ -120,3 +120,25 @@ function demo(): void {
     totalAmount: 1_000_000_000_000n,
     startUnixSeconds: Math.floor(Date.now() / 1000),
     durationSeconds: 12 * 30 * 24 * 60 * 60,
+    preset: "s-curve",
+    cliffSeconds: 30 * 24 * 60 * 60,
+  };
+
+  const args = toStreamflowArgs(plan);
+  console.log("streamflow args:");
+  console.log({
+    ...args,
+    recipient: args.recipient.toBase58(),
+    mint: args.mint.toBase58(),
+    depositedAmount: args.depositedAmount.toString(),
+    cliffAmount: args.cliffAmount.toString(),
+    amountPerPeriod: args.amountPerPeriod.toString(),
+  });
+  console.log(
+    "\nthe real call continues from here with StreamClient.create(...)",
+  );
+}
+
+if (require.main === module) {
+  demo();
+}

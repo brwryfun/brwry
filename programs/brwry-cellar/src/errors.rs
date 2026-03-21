@@ -14,3 +14,6 @@ pub enum BrwryError {
     UnauthorizedRecipient,
     #[msg("curve parameters are outside supported bounds")]
     CurveOutOfBounds,
+    #[msg("arithmetic overflow while computing release amount")]
+    MathOverflow,
+}

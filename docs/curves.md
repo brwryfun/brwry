@@ -105,3 +105,22 @@ shape. Most balanced presets settle on this.
 If you cannot remember which is which, the picker below tends to work:
 
 1. Is there a probation period before vesting starts? **Cliff**.
+2. Do you want the market to feel the unlock late? **Exponential**.
+3. Do you want to front-load the unlock? **Logarithmic**.
+4. Does the schedule span a full year or more? **S-curve**.
+5. Otherwise, **linear**.
+
+---
+
+## Composition
+
+A schedule is not required to use a single curve. The designer supports a
+piecewise approach: a cliff into an s-curve, a linear warm-up into an
+exponential reveal, and so on. The curve compiler walks the piecewise
+definition, normalizes each segment to its own `[0, 1]` window, and emits
+a single monotone function to the on-chain program.
+
+The rule the compiler enforces is monotonicity. If a piecewise curve
+crosses zero slope or dips downward, the compile step fails loudly rather
+than silently rounding. This avoids the common bug where a vesting stream
+appears to claw back already-claimed tokens after a steep transition.

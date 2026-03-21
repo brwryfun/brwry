@@ -151,3 +151,30 @@ That writes an SVG to the working directory and prints the discrete cliff table 
 |   |   `-- tests/curves.rs    boundary tests for every preset
 |   `-- brwry-cellar/          Anchor 0.29 program around the curves crate
 |       |-- src/lib.rs         program entry, instruction dispatchers
+|       |-- src/state.rs       Cask + Schedule PDAs
+|       |-- src/errors.rs      BrwryError enum
+|       `-- src/instructions/  create_cask + release_barrel
+|-- src/
+|   |-- curve_designer.py      five reference curves, matplotlib plots
+|   |-- cask_visualizer.py     ascii + matplotlib view of an aging cask
+|   `-- example_vesting.ts     Streamflow call pattern sketch
+|-- docs/
+|   |-- curves.md              formulas and when to use them
+|   |-- rust.md                brwry-curves usage and fixed-point conventions
+|   |-- anchor.md              brwry-cellar PDAs, instructions, CPI surface
+|   `-- quickstart.md          opinionated five-minute walkthrough
+|-- Cargo.toml                 workspace manifest
+|-- Anchor.toml                anchor workspace, placeholder program id
+|-- LICENSE
+`-- README.md
+```
+
+Production code (the full web, service, watcher, and designer) lives outside this repository. The pieces here are the ones that benefit from being public: math, prose, and a couple of sketches.
+
+## Contributing
+
+Issues are welcome. Pull requests are read, but low-noise ones land faster than sweeping ones. If you are adding a curve, please include the closed-form formula in `docs/curves.md` and a plot in `src/`.
+
+## License
+
+MIT. See `LICENSE`.

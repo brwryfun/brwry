@@ -139,3 +139,29 @@ fn sigmoid_scaled(x: i128) -> i128 {
 }
 
 #[cfg(test)]
+mod unit {
+    use super::*;
+
+    #[test]
+    fn linear_endpoints() {
+        assert_eq!(linear(0), 0);
+        assert_eq!(linear(SCALE), SCALE);
+        assert_eq!(linear(SCALE / 2), SCALE / 2);
+    }
+
+    #[test]
+    fn cliff_before_boundary_is_zero() {
+        assert_eq!(cliff(0, SCALE / 4), 0);
+        assert_eq!(cliff(SCALE / 4 - 1, SCALE / 4), 0);
+    }
+
+    #[test]
+    fn cliff_at_boundary_is_zero() {
+        assert_eq!(cliff(SCALE / 4, SCALE / 4), 0);
+    }
+
+    #[test]
+    fn cliff_endpoint_is_full() {
+        assert_eq!(cliff(SCALE, SCALE / 4), SCALE);
+    }
+}

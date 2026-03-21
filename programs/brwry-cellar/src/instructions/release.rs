@@ -102,3 +102,22 @@ fn compute_claimable(cask: &Cask, now: i64) -> Result<u64> {
 
     let t = cask.progress_scaled(now);
     let fraction = sample_curve(params, t) as u128;
+    let unlocked = (cask.total_amount as u128 * fraction) / SCALE as u128;
+    let already = cask.released_amount as u128;
+    if unlocked <= already {
+        return Ok(0);
+    }
+    Ok((unlocked - already) as u64)
+}
+
+fn cliff_scaled(cask: &Cask) -> u64 {
+    if cask.cliff_ts <= cask.start_ts {
+        return 0;
+    }
+    if cask.cliff_ts >= cask.end_ts {
+        return SCALE;
+    }
+    let numer = (cask.cliff_ts - cask.start_ts) as u128;
+    let denom = (cask.end_ts - cask.start_ts) as u128;
+    ((numer * SCALE as u128) / denom) as u64
+}

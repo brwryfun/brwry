@@ -74,3 +74,17 @@ mod tests {
         let params = CurveParams {
             kind: CurveKind::SCurve,
             ..Default::default()
+        };
+        let total: u128 = 1_000_000_000;
+        let plan = sample_schedule(params, total, 0, 100, 10);
+        let sum: u128 = plan.iter().map(|(_, amount)| *amount).sum();
+        assert!(sum <= total);
+        assert!(total - sum < 10);
+    }
+
+    #[test]
+    fn zero_periods_returns_empty_plan() {
+        let plan = sample_schedule(CurveParams::default(), 1_000, 0, 10, 0);
+        assert!(plan.is_empty());
+    }
+}
