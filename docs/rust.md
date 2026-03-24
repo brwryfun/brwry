@@ -68,3 +68,16 @@ returned value.
 - return value: `u64` in `[0, SCALE]`, representing the fraction unlocked
 
 The on-chain program converts its `i64` timestamps into `t` using
+`Cask::progress_scaled`. The vesting fraction returned from `sample_curve`
+is then multiplied by `total_amount` and divided by `SCALE` to recover a
+plain token amount.
+
+## Feature flags
+
+`brwry-curves` exposes a `std` feature that gates the `cask_cli` binary and
+nothing else. The library is usable in a Solana program (which compiles to
+BPF without `std`) by turning the feature off.
+
+```toml
+brwry-curves = { path = "../brwry-curves", default-features = false }
+```
