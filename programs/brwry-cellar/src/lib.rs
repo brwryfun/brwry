@@ -25,4 +25,3 @@ pub mod brwry_cellar {
         instructions::release::handler(ctx)
     }
 }
-

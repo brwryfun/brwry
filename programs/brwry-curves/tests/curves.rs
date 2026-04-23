@@ -72,4 +72,3 @@ fn sample_curve_dispatches_by_kind() {
     let sum: u128 = plan.iter().map(|(_, a)| *a).sum();
     assert!(sum <= 1_000);
 }
-
